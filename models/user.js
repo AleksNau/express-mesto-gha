@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userShema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   id:{
     type:String,
     required:true
@@ -23,4 +23,4 @@ const userShema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('cards',userShema);
+module.exports = mongoose.model('user', userSchema);

@@ -12,16 +12,20 @@ const path = require('path')
 const cards = require('./cards.json');
 const bodyParser = require('body-parser')
 app.use(bodyParser.json());
-
-app.get('/user', (req, res) => {
+//получить всех пользователей
+app.get('/users', (req, res) => {
   res.status(201).send('профиль пользователя')
+})
+//получить пользователя по id
+app.get('/users/:userId', (req, res) => {
+  res.status(200).send('профиль пользователя')
 })
 //отправка карточек
 app.get('/cards', (req, res) => {
   res.status(200).send(cards)
 })
-
-app.post('/', (req, res) => {
+//создание пользователя
+app.post('/users', (req, res) => {
   res.send('регистрация')
 })
 
