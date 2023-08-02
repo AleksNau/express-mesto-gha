@@ -11,6 +11,9 @@ const port = 3000
 const path = require('path')
 const cards = require('./cards.json');
 const bodyParser = require('body-parser')
+
+const user = require('./models/user')
+const card = require('./models/cards')
 app.use(bodyParser.json());
 //получить всех пользователей
 app.get('/users', (req, res) => {
