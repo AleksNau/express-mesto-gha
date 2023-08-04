@@ -27,6 +27,7 @@ router.post('/users', (req, res) => {
           res.status(200).send(user);
         })
         .catch((err) => res.status(500).send('server error'))
+        //404,500
   })
 
   //получить всех пользователей
@@ -36,7 +37,17 @@ router.post('/users', (req, res) => {
           res.status(200).send(users);
         })
         .catch((err) => res.status(500).send('server error'))
-    
+    //400,500
+  })
+
+  router.patch('/users/me', (req, res) => {
+    res.send('запрос обновляет информацию о пользователе.')
+    //400,404,500
+  })
+
+  router.patch('/users/me/avatar', (req, res) => {
+    res.send('запрос обновляет аватар пользователя.')
+    //400,404,500
   })
   
   module.exports = router;
