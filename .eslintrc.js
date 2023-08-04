@@ -27,6 +27,5 @@ module.exports = {
     "plugins": [
         "react"
     ],
-    "rules": {
-    }
+    "rules": ["error", { "allow": ["_id"] }]
 }
