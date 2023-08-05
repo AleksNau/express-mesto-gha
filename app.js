@@ -14,9 +14,7 @@ const path = require('path');
 const cards = require('./cards.json');
 const bodyParser = require('body-parser');
 
-const userModel = require('./models/user');
-const cardModel = require('./models/cards');
-//импортированили роуты 
+//импортированили роуты
 const router = require('./routes/index')
 
 app.use(bodyParser.json());

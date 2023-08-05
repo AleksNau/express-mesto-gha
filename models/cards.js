@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const ObjectId = require('mongodb').ObjectID;
 
 const cardsSchema = new mongoose.Schema({
-    id:{
-        type:String,
-        required:true
-    },
     name:{
       type:String,
       minlength:2,
@@ -26,7 +22,7 @@ const cardsSchema = new mongoose.Schema({
     },
     createdAt: {
       type: mongoose.Schema.Types.Date,
-      required:true
+     // required:true
     }
 })
 

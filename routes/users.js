@@ -1,5 +1,5 @@
 const router = require('express').Router();
-
+const userModel = require('../models/user');
 //создание пользователя
 router.post('/users', (req, res) => {
     return userModel.create({...req.body})
@@ -14,7 +14,6 @@ router.post('/users', (req, res) => {
       console.error();
       return res.status(500).send('server error')//должна быть 400 ошибка
     })
-    res.send('регистрация');
   })
 //получить пользователя по id
   router.get('/users/:id', (req, res) => {
@@ -49,5 +48,5 @@ router.post('/users', (req, res) => {
     res.send('запрос обновляет аватар пользователя.')
     //400,404,500
   })
-  
+
   module.exports = router;
