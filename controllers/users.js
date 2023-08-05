@@ -1,26 +1,24 @@
 const userModel = require('../models/user');
 
-const createProfile = (req, res) => {
+const createProfile = (req, res) =>{
   return userModel.create({...req.body})
-    .then((user) => {
+    .then((user)=> {
       res.status(201).send(user);
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
         return res.status(400).send({
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
-        });
-      }
+        });}
       console.error();
       return res.status(500).send('server error')//должна быть 400 ошибка
-    })
-}
+    })}
 
 const getProfileById = (req, res) => {
   const {id} = req.params;
   return userModel.findById(id)
-    .then((user) => {
-      if (!user) {
+    .then((user)=> {
+      if(!user) {
         return res.status(484).send('server error');
       }
       res.status(200).send(user);
@@ -31,7 +29,7 @@ const getProfileById = (req, res) => {
 
 const getUsersList = (req, res) => {
   return userModel.find()
-    .then((users) => {
+    .then((users)=> {
       res.status(200).send(users);
     })
     .catch((err) => res.status(500).send('server error'))
@@ -39,17 +37,33 @@ const getUsersList = (req, res) => {
 }
 
 const updateProfile = (req, res) => {
-  res.send('запрос обновляет информацию о пользователе.')
+  const { name, about } = req.body;
+  userModel
+    .findByIdAndUpdate(
+      req.user._id,
+      { name, about },
+      { new: true}
+    )
+    .then((user) => {
+      res.status(200).send(user);
+    })
   //400,404,500
 }
 
 const changeAvatar = (req, res) => {
-  res.send('запрос обновляет аватар пользователя.')
+  const { avatar } = req.body;
+  userModel
+    .findByIdAndUpdate(
+      req.user._id,
+      { avatar },
+      { new: true},
+    )
+    .then((user) => res.status(200).send(user))
   //400,404,500
 }
 
 
-module.exports = {
+  module.exports = {
   createProfile,
   getProfileById,
   getUsersList,
