@@ -11,7 +11,6 @@ const app = express();
 const port = 3000;
 const path = require('path');
 
-const cards = require('./cards.json');
 const bodyParser = require('body-parser');
 app.use((req, res, next) => {
   req.user = {

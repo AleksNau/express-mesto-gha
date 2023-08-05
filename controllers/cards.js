@@ -33,8 +33,37 @@ const deleteCard = (req, res) => {
     })
 }
 
+const getLikes = (req, res) => {
+  cardModel
+    .findByIdAndUpdate(
+      req.params.cardId,
+      { $addToSet: { likes: req.user._id } },
+      { new: true },
+    )
+    .then((card) => {
+
+      res.send({ data: card });
+    })
+
+};
+// убрать лайк
+const deleteLikes = (req, res) => {
+  cardModel
+    .findByIdAndUpdate(
+      req.params.cardId,
+      { $pull: { likes: req.user._id } },
+      { new: true },
+    )
+    .then((card) => {
+
+      res.send({ data: card });
+    })
+
+};
 module.exports = {
     getCards,
     createCard,
-    deleteCard
+    deleteCard,
+    getLikes,
+    deleteLikes
 }
