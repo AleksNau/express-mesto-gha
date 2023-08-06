@@ -58,7 +58,7 @@ const updateProfile = (req, res) => {
     .findByIdAndUpdate(
       req.user._id,
       {name, about},
-      {new: true}
+      {new: true, runValidators: true}
     )
     .then((user) => {
       if (!user) {
@@ -67,7 +67,7 @@ const updateProfile = (req, res) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === 'CastError') {
         return res.status(400).send({
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });

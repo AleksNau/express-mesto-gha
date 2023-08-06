@@ -58,7 +58,7 @@ const getLikes = (req, res) => {
       res.send({data: card});
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === 'CastError') {
         return res.status(400).send({
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
@@ -82,7 +82,7 @@ const deleteLikes = (req, res) => {
       res.send({data: card});
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
+      if (err.name === "ValidationError" || err.name === 'CastError') {
         return res.status(400).send({
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
