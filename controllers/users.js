@@ -29,7 +29,7 @@ const getProfileById = (req, res) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.name === "CastError") {
+      if (err.name === 'CastError') {
         return res.status(400).send({
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
