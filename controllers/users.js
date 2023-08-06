@@ -15,7 +15,6 @@ const createProfile = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
-      console.error();
       return res.status(500).send(serverError)
     })
 }
@@ -44,7 +43,6 @@ const getUsersList = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
-      console.error();
       res.status(500).send(serverError)
     })
   //400,500
@@ -70,7 +68,6 @@ const updateProfile = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
-      console.error();
       res.status(500).send(serverError)
     })
   //400,404,500
@@ -96,7 +93,6 @@ const changeAvatar = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
-      console.error();
       res.status(500).send(serverError)
     })
   //400,404,500

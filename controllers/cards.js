@@ -23,7 +23,6 @@ const createCard = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
-      console.error();
       return res.status(500).send(serverError);
     })
 }//400,500
@@ -38,7 +37,6 @@ const deleteCard = (req, res) => {
       return cardModel.deleteOne({"_id": cardId}).then(() => res.send({message: 'Карточка успешно удалена'}));
     })
     .catch((err) => {
-      console.error();
       return res.status(500).send(serverError);
     })
 }//404
@@ -62,7 +60,6 @@ const getLikes = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
-      console.error();
       return res.status(500).send(serverError);
     })
 //400,404,500
@@ -87,7 +84,6 @@ const deleteLikes = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
-      console.error();
       return res.status(500).send(serverError);
     })
 //400,404,500
