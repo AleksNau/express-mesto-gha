@@ -72,6 +72,7 @@ const updateProfile = (req, res) => {
           message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
         });
       }
+
       res.status(500).send(serverError)
     })
   //400,404,500

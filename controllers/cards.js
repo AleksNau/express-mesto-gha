@@ -37,6 +37,9 @@ const deleteCard = (req, res) => {
       return cardModel.deleteOne({"_id": cardId}).then(() => res.send({message: 'Карточка успешно удалена'}));
     })
     .catch((err) => {
+      if (err.name === 'CastError') {
+        return res.status(400).send({message: 'Передан некорретный Id'});
+      }
       return res.status(500).send(serverError);
     })
 }//404
