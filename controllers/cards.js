@@ -58,10 +58,8 @@ const getLikes = (req, res) => {
       res.send({data: card});
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(400).send({
-          message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
-        });
+      if (err.name === 'CastError') {
+        return res.status(400).send(cardNotFound);
       }
       return res.status(500).send(serverError);
     })
@@ -82,10 +80,8 @@ const deleteLikes = (req, res) => {
       res.send({data: card});
     })
     .catch((err) => {
-      if (err.name === "ValidationError") {
-        return res.status(400).send({
-          message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
-        });
+      if (err.name === 'CastError') {
+        return res.status(400).send(cardNotFound);
       }
       return res.status(500).send(serverError);
     })
