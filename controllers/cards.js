@@ -32,7 +32,7 @@ const deleteCard = (req, res) => {
   return cardModel.findById(cardId)
     .then((card) => {
       if (!card) {
-        return res.status(400).send(cardNotFound);
+        return res.status(404).send(cardNotFound);
       }
       return cardModel.deleteOne({"_id": cardId}).then(() => res.send({message: 'Карточка успешно удалена'}));
     })
