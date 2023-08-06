@@ -30,9 +30,7 @@ const getProfileById = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({
-          message: `${Object.values(err.errors).map((err) => err.message).join(", ")}`
-        });
+        return res.status(400).send({message: 'Передан некорретный Id'});
       }
       res.status(500).send(serverError)})
   //404,500
