@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const ObjectId = require('mongodb').ObjectID;
 
 const cardsSchema = new mongoose.Schema({
   name: {

@@ -8,7 +8,6 @@ const getCards = (req, res) => cardModel.find()
   })
   .catch(() => res.status(500).send(serverError));// 400,500
 
-
 const createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
@@ -44,7 +43,7 @@ const deleteCard = (req, res) => {
 };// 404
 
 const getLikes = (req, res) => {
-   cardModel
+  cardModel
     .findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: req.user._id } },

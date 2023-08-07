@@ -9,7 +9,7 @@ const createProfile = (req, res) => userModel.create({ ...req.body })
   .catch((err) => {
     if (err.name === 'ValidationError') {
       return res.status(400).send({
-        message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
+        message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
       });
     }
     return res.status(500).send(serverError);
@@ -22,13 +22,13 @@ const getProfileById = (req, res) => {
       if (!user) {
         return res.status(404).send(userNotFound);
       }
-      res.status(200).send(user);
+      return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         return res.status(400).send({ message: 'Передан некорретный Id' });
       }
-      res.status(500).send(serverError);
+      return res.status(500).send(serverError);
     });
   // 404,500
 };
@@ -40,10 +40,10 @@ const getUsersList = (req, res) => userModel.find()
   .catch((err) => {
     if (err.name === 'ValidationError') {
       return res.status(400).send({
-        message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
+        message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
       });
     }
-    res.status(500).send(serverError);
+    return res.status(500).send(serverError);
   });
 // 400,500
 
@@ -59,16 +59,16 @@ const updateProfile = (req, res) => {
       if (!user) {
         return res.status(404).send(userNotFound);
       }
-      res.status(200).send(user);
+      return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         return res.status(400).send({
-          message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
+          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
         });
       }
 
-      res.status(500).send(serverError);
+      return res.status(500).send(serverError);
     });
   // 400,404,500
 };
@@ -85,15 +85,15 @@ const changeAvatar = (req, res) => {
       if (!user) {
         return res.status(404).send(userNotFound);
       }
-      res.status(200).send(user);
+      return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({
-          message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
+          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
         });
       }
-      res.status(500).send(serverError);
+      return res.status(500).send(serverError);
     });
   // 400,404,500
 };
