@@ -2,14 +2,14 @@ const cardModel = require('../models/cards');
 const serverError = require('../errors/serverError');
 const cardNotFound = require('../errors/cardNotFound');
 
-module.exports.getCards = (req, res) => cardModel.find()
+const getCards = (req, res) => cardModel.find()
   .then((users) => {
     res.status(200).send(users);
   })
   .catch(() => res.status(500).send(serverError));// 400,500
 
 
-  module.exports.createCard = (req, res) => {
+const createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   return cardModel.create({ owner, name, link })
@@ -26,7 +26,7 @@ module.exports.getCards = (req, res) => cardModel.find()
     });
 };// 400,500
 
-module.exports.deleteCard = (req, res) => {
+const deleteCard = (req, res) => {
   const { cardId } = req.params;
   return cardModel.findById(cardId)
     .then((card) => {
@@ -43,7 +43,7 @@ module.exports.deleteCard = (req, res) => {
     });
 };// 404
 
-module.exports.getLikes = (req, res) => {
+const getLikes = (req, res) => {
    cardModel
     .findByIdAndUpdate(
       req.params.cardId,
@@ -54,7 +54,7 @@ module.exports.getLikes = (req, res) => {
       if (!card) {
         return res.status(404).send(cardNotFound);
       }
-      res.send({ data: card });
+      return res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -65,7 +65,7 @@ module.exports.getLikes = (req, res) => {
 // 400,404,500
 };
 // убрать лайк
-module.exports.deleteLikes = (req, res) => {
+const deleteLikes = (req, res) => {
   cardModel
     .findByIdAndUpdate(
       req.params.cardId,
@@ -76,7 +76,7 @@ module.exports.deleteLikes = (req, res) => {
       if (!card) {
         return res.status(404).send(cardNotFound);
       }
-      res.send({ data: card });
+      return res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -86,4 +86,10 @@ module.exports.deleteLikes = (req, res) => {
     });
 // 400,404,500
 };
-
+module.exports = {
+  getCards,
+  createCard,
+  deleteCard,
+  getLikes,
+  deleteLikes,
+};
