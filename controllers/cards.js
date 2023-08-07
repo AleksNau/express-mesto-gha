@@ -1,13 +1,10 @@
 const cardModel = require('../models/cards');
-const serverError = require('../errors/serverError');
-const cardError = require('../errors/cardNotFound');
-const castError = require('../errors/castError');
-const validationError = require('../errors/validationError');
+const {
+  serverError, cardError, castError, validationError,
+} = require('../errors/errors');
 
 const getCards = (req, res) => cardModel.find()
-  .then((users) => {
-    return res.status(200).send(users);
-  })
+  .then((users) => res.status(200).send(users))
   .catch(() => serverError(res));// 400,500
 
 const createCard = (req, res) => {

@@ -1,8 +1,7 @@
 const userModel = require('../models/user');
-const userNotFound = require('../errors/notFound');
-const serverError = require('../errors/serverError');
-const validationError = require('../errors/validationError');
-const castError = require('../errors/castError');
+const {
+  userNotFound, serverError, validationError, castError,
+} = require('../errors/errors');
 
 const createProfile = (req, res) => userModel.create({ ...req.body })
   .then((user) => {
