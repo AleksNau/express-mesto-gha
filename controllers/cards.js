@@ -44,7 +44,7 @@ const deleteCard = (req, res) => {
 };// 404
 
 const getLikes = (req, res) => {
-  cardModel
+  return cardModel
     .findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: req.user._id } },
