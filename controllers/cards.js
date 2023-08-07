@@ -2,14 +2,14 @@ const cardModel = require('../models/cards');
 const serverError = require('../errors/serverError');
 const cardNotFound = require('../errors/cardNotFound');
 
-const getCards = (req, res) => cardModel.find()
+module.exports.getCards = (req, res) => cardModel.find()
   .then((users) => {
     res.status(200).send(users);
   })
   .catch(() => res.status(500).send(serverError));// 400,500
 
 
-const createCard = (req, res) => {
+  module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   return cardModel.create({ owner, name, link })
@@ -26,7 +26,7 @@ const createCard = (req, res) => {
     });
 };// 400,500
 
-const deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return cardModel.findById(cardId)
     .then((card) => {
@@ -43,8 +43,8 @@ const deleteCard = (req, res) => {
     });
 };// 404
 
-const getLikes = (req, res) => {
-  return cardModel
+module.exports.getLikes = (req, res) => {
+   cardModel
     .findByIdAndUpdate(
       req.params.cardId,
       { $addToSet: { likes: req.user._id } },
@@ -65,7 +65,7 @@ const getLikes = (req, res) => {
 // 400,404,500
 };
 // убрать лайк
-const deleteLikes = (req, res) => {
+module.exports.deleteLikes = (req, res) => {
   cardModel
     .findByIdAndUpdate(
       req.params.cardId,
@@ -86,10 +86,4 @@ const deleteLikes = (req, res) => {
     });
 // 400,404,500
 };
-module.exports = {
-  getCards,
-  createCard,
-  deleteCard,
-  getLikes,
-  deleteLikes,
-};
+
