@@ -1,5 +1,5 @@
 const serverError = {
-  "message": 'server error'
-}
+  message: 'server error',
+};
 
 module.exports = serverError;
