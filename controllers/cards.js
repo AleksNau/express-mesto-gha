@@ -2,6 +2,20 @@ const cardModel = require('../models/cards');
 const serverError = require('../errors/serverError');
 const cardNotFound = require('../errors/cardNotFound');
 
+const validationError = (res) => {
+  return res.status(400).send({
+    message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
+  });
+}
+
+const castError = (res) => {
+  return res.status(400).send({ message: 'Передан некорретный Id' });
+}
+
+const cardError = (res) => {
+  return res.status(404).send(cardNotFound);
+}
+
 const getCards = (req, res) => cardModel.find()
   .then((users) => {
     res.status(200).send(users);
@@ -17,9 +31,7 @@ const createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({
-          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-        });
+        return validationError(res);
       }
       return res.status(500).send(serverError);
     });
@@ -30,13 +42,13 @@ const deleteCard = (req, res) => {
   return cardModel.findById(cardId)
     .then((card) => {
       if (!card) {
-        return res.status(404).send(cardNotFound);
+        return cardError(res);
       }
       return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Передан некорретный Id' });
+        return castError(res);
       }
       return res.status(500).send(serverError);
     });
@@ -51,13 +63,13 @@ const getLikes = (req, res) => {
     )
     .then((card) => {
       if (!card) {
-        return res.status(404).send(cardNotFound);
+        return cardError(res);
       }
       return res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send(cardNotFound);
+        return castError(res);
       }
       return res.status(500).send(serverError);
     });
@@ -73,13 +85,13 @@ const deleteLikes = (req, res) => {
     )
     .then((card) => {
       if (!card) {
-        return res.status(404).send(cardNotFound);
+        return cardError(res);
       }
       return res.send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send(cardNotFound);
+        return castError(res);
       }
       return res.status(500).send(serverError);
     });
