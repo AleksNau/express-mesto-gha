@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
   next();
 });
-module.exports.createCard = (req, res) => {
+module.exports.createCard = () => {
 };
 // импортированили роуты
 const router = require('./routes/index');

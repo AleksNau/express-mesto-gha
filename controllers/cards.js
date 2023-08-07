@@ -6,7 +6,8 @@ const getCards = (req, res) => cardModel.find()
   .then((users) => {
     res.status(200).send(users);
   })
-  .catch((err) => res.status(500).send(serverError));// 400,500
+  .catch(() => res.status(500).send(serverError));// 400,500
+
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
@@ -18,7 +19,7 @@ const createCard = (req, res) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return res.status(400).send({
-          message: `${Object.values(err.errors).map((err) => err.message).join(', ')}`,
+          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
         });
       }
       return res.status(500).send(serverError);
