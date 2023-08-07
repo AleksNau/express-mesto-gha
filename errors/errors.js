@@ -2,7 +2,7 @@ const serverError = require('./serverError');
 const cardError = require('./cardNotFound');
 const castError = require('./castError');
 const validationError = require('./validationError');
-const userNotFound = require('./notFound');
+const userNotFound = require('./userNotFound');
 
 module.exports = {
   validationError,
