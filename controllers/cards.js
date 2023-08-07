@@ -6,9 +6,9 @@ const validationError = require('../errors/validationError');
 
 const getCards = (req, res) => cardModel.find()
   .then((users) => {
-    res.status(200).send(users);
+    return res.status(200).send(users);
   })
-  .catch(() => res.status(500).send(serverError));// 400,500
+  .catch(() => serverError(res));// 400,500
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
@@ -21,7 +21,7 @@ const createCard = (req, res) => {
       if (err.name === 'ValidationError') {
         return validationError(res, err);
       }
-      return res.status(500).send(serverError);
+      return serverError(res);
     });
 };// 400,500
 
@@ -38,7 +38,7 @@ const deleteCard = (req, res) => {
       if (err.name === 'CastError') {
         return castError(res);
       }
-      return res.status(500).send(serverError);
+      return serverError(res);
     });
 };// 404
 
@@ -59,7 +59,7 @@ const getLikes = (req, res) => {
       if (err.name === 'CastError') {
         return castError(res);
       }
-      return res.status(500).send(serverError);
+      return serverError(res);
     });
 // 400,404,500
 };
@@ -81,7 +81,7 @@ const deleteLikes = (req, res) => {
       if (err.name === 'CastError') {
         return castError(res);
       }
-      return res.status(500).send(serverError);
+      return serverError(res);
     });
 // 400,404,500
 };

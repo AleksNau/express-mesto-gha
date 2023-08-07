@@ -1,6 +1,8 @@
 const userModel = require('../models/user');
 const userNotFound = require('../errors/notFound');
 const serverError = require('../errors/serverError');
+const validationError = require('../errors/validationError');
+const castError = require('../errors/castError');
 
 const createProfile = (req, res) => userModel.create({ ...req.body })
   .then((user) => {
@@ -8,11 +10,9 @@ const createProfile = (req, res) => userModel.create({ ...req.body })
   })
   .catch((err) => {
     if (err.name === 'ValidationError') {
-      return res.status(400).send({
-        message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-      });
+      return validationError(res, err);
     }
-    return res.status(500).send(serverError);
+    return serverError(res);
   });
 
 const getProfileById = (req, res) => {
@@ -20,15 +20,15 @@ const getProfileById = (req, res) => {
   return userModel.findById(id)
     .then((user) => {
       if (!user) {
-        return res.status(404).send(userNotFound);
+        return userNotFound(res);
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Передан некорретный Id' });
+        return castError(res);
       }
-      return res.status(500).send(serverError);
+      return serverError(res);
     });
   // 404,500
 };
@@ -39,11 +39,9 @@ const getUsersList = (req, res) => userModel.find()
   })
   .catch((err) => {
     if (err.name === 'ValidationError') {
-      return res.status(400).send({
-        message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-      });
+      return validationError(res, err);
     }
-    return res.status(500).send(serverError);
+    return serverError(res);
   });
 // 400,500
 
@@ -57,18 +55,16 @@ const updateProfile = (req, res) => {
     )
     .then((user) => {
       if (!user) {
-        return res.status(404).send(userNotFound);
+        return userNotFound(res);
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        return res.status(400).send({
-          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-        });
+        return validationError(res, err);
       }
 
-      return res.status(500).send(serverError);
+      return serverError(res);
     });
   // 400,404,500
 };
@@ -83,17 +79,15 @@ const changeAvatar = (req, res) => {
     )
     .then((user) => {
       if (!user) {
-        return res.status(404).send(userNotFound);
+        return userNotFound(res);
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({
-          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-        });
+        return validationError(res, err);
       }
-      return res.status(500).send(serverError);
+      return serverError(res);
     });
   // 400,404,500
 };
