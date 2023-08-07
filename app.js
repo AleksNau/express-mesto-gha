@@ -1,14 +1,15 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
+require('dotenv').config();
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+const { PORT = 3000, MONGODB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
+
+mongoose.connect(MONGODB_URL, {
   useNewUrlParser: true,
 }).then(() => {
   console.log('mangoo включено');
 });
 const app = express();
-const port = 3000;
-const path = require('path');
 
 const bodyParser = require('body-parser');
 
@@ -20,7 +21,6 @@ app.use((req, res, next) => {
   next();
 });
 module.exports.createCard = (req, res) => {
-
 };
 // импортированили роуты
 const router = require('./routes/index');
@@ -29,6 +29,6 @@ app.use(bodyParser.json());
 // подключили роуты юзера
 app.use(router);
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`listening on port ${PORT}`);
 });
