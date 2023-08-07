@@ -1,5 +1,7 @@
-const cardNotFound = {
-  message: 'Карточка с указанным _id не найдена',
+const cardError = (res) => {
+  res.status(404).send({
+    message: 'Карточка с указанным _id не найдена',
+  });
 };
 
-module.exports = cardNotFound;
+module.exports = cardError;

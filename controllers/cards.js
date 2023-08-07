@@ -1,20 +1,8 @@
 const cardModel = require('../models/cards');
 const serverError = require('../errors/serverError');
-const cardNotFound = require('../errors/cardNotFound');
-
-const validationError = (res) => {
-  return res.status(400).send({
-    message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-  });
-}
-
-const castError = (res) => {
-  return res.status(400).send({ message: 'Передан некорретный Id' });
-}
-
-const cardError = (res) => {
-  return res.status(404).send(cardNotFound);
-}
+const cardError = require('../errors/cardNotFound');
+const castError = require('../errors/castError');
+const validationError = require('../errors/validationError');
 
 const getCards = (req, res) => cardModel.find()
   .then((users) => {
@@ -31,7 +19,7 @@ const createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return validationError(res);
+        return validationError(res, err);
       }
       return res.status(500).send(serverError);
     });
