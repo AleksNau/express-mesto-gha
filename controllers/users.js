@@ -36,9 +36,7 @@ const getUsersList = (req, res) => userModel.find()
   .then((users) => {
     res.status(200).send(users);
   })
-  .catch((err) => {
-    return serverError(res);
-  });
+  .catch(() => serverError(res));
 // 400,500
 
 const updateProfile = (req, res) => {
@@ -71,7 +69,7 @@ const changeAvatar = (req, res) => {
     .findByIdAndUpdate(
       req.user._id,
       { avatar },
-      { new: true , runValidators: true},
+      { new: true, runValidators: true },
     )
     .then((user) => {
       if (!user) {
