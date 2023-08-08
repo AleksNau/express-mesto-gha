@@ -1,11 +1,12 @@
 const userModel = require('../models/user');
+const {HTTP_STATUS_OK,HTTP_STATUS_CREATED} = require('http2').constants;
 const {
   userNotFound, serverError, validationError, castError,
 } = require('../errors/errors');
 
 const createProfile = (req, res) => userModel.create({ ...req.body })
   .then((user) => {
-    res.status(201).send(user);
+    res.status(HTTP_STATUS_CREATED).send(user);
   })
   .catch((err) => {
     if (err.name === 'ValidationError') {
@@ -21,7 +22,7 @@ const getProfileById = (req, res) => {
       if (!user) {
         return userNotFound(res);
       }
-      return res.status(200).send(user);
+      return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -34,7 +35,7 @@ const getProfileById = (req, res) => {
 
 const getUsersList = (req, res) => userModel.find()
   .then((users) => {
-    res.status(200).send(users);
+    res.status(HTTP_STATUS_OK).send(users);
   })
   .catch(() => serverError(res));
 // 400,500
@@ -51,7 +52,7 @@ const updateProfile = (req, res) => {
       if (!user) {
         return userNotFound(res);
       }
-      return res.status(200).send(user);
+      return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -75,7 +76,7 @@ const changeAvatar = (req, res) => {
       if (!user) {
         return userNotFound(res);
       }
-      return res.status(200).send(user);
+      return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

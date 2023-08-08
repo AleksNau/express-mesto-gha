@@ -1,10 +1,11 @@
 const cardModel = require('../models/cards');
+const {HTTP_STATUS_OK,HTTP_STATUS_CREATED} = require('http2').constants;
 const {
   serverError, cardError, castError, validationError,
 } = require('../errors/errors');
 
 const getCards = (req, res) => cardModel.find()
-  .then((users) => res.status(200).send(users))
+  .then((users) => res.status(HTTP_STATUS_OK).send(users))
   .catch(() => serverError(res));// 400,500
 
 const createCard = (req, res) => {
@@ -12,7 +13,7 @@ const createCard = (req, res) => {
   const owner = req.user._id;
   return cardModel.create({ owner, name, link })
     .then((card) => {
-      res.status(201).send(card);
+      res.status(HTTP_STATUS_CREATED).send(card);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -50,7 +51,7 @@ const getLikes = (req, res) => {
       if (!card) {
         return cardError(res);
       }
-      return res.send({ data: card });
+      return res.status(HTTP_STATUS_OK).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -72,7 +73,7 @@ const deleteLikes = (req, res) => {
       if (!card) {
         return cardError(res);
       }
-      return res.send({ data: card });
+      return res.status(HTTP_STATUS_OK).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
