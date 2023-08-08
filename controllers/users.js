@@ -37,9 +37,6 @@ const getUsersList = (req, res) => userModel.find()
     res.status(200).send(users);
   })
   .catch((err) => {
-    if (err.name === 'ValidationError') {
-      return validationError(res, err);
-    }
     return serverError(res);
   });
 // 400,500
@@ -59,7 +56,7 @@ const updateProfile = (req, res) => {
       return res.status(200).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'CastError') {
+      if (err.name === 'ValidationError') {
         return validationError(res, err);
       }
 
@@ -74,7 +71,7 @@ const changeAvatar = (req, res) => {
     .findByIdAndUpdate(
       req.user._id,
       { avatar },
-      { new: true },
+      { new: true , runValidators: true},
     )
     .then((user) => {
       if (!user) {
