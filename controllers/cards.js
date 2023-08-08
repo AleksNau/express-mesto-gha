@@ -1,5 +1,6 @@
+const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
 const cardModel = require('../models/cards');
-const {HTTP_STATUS_OK,HTTP_STATUS_CREATED} = require('http2').constants;
+
 const {
   serverError, cardError, castError, validationError,
 } = require('../errors/errors');
