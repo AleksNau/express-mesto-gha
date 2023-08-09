@@ -11,8 +11,6 @@ mongoose.connect(MONGODB_URL, {
 });
 const app = express();
 
-const bodyParser = require('body-parser');
-
 app.use((req, res, next) => {
   req.user = {
     _id: '64ce17208f756d4394a543aa', // вставьте сюда _id созданного в предыдущем пункте пользователя
@@ -25,7 +23,7 @@ module.exports.createCard = () => {
 // импортированили роуты
 const router = require('./routes/index');
 
-app.use(bodyParser.json());
+app.use(express.json());
 // подключили роуты юзера
 app.use(router);
 
