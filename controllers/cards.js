@@ -1,8 +1,9 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
+const { CastError, ValidationError } = require('mongoose').Error;
 const cardModel = require('../models/cards');
 
 const {
-  serverError, cardError, castError, validationError,
+  serverError, cardError, castErrorAnswer, validationErrorAnswer,
 } = require('../errors/errors');
 
 const getCards = (req, res) => cardModel.find()
@@ -17,8 +18,8 @@ const createCard = (req, res) => {
       res.status(HTTP_STATUS_CREATED).send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return validationError(res, err);
+      if (err instanceof ValidationError) {
+        return validationErrorAnswer(res, err);
       }
       return serverError(res);
     });
@@ -34,8 +35,8 @@ const deleteCard = (req, res) => {
       return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }));
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        return castError(res);
+      if (err instanceof CastError) {
+        return castErrorAnswer(res);
       }
       return serverError(res);
     });
@@ -55,8 +56,8 @@ const getLikes = (req, res) => {
       return res.status(HTTP_STATUS_OK).send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        return castError(res);
+      if (err instanceof CastError) {
+        return castErrorAnswer(res);
       }
       return serverError(res);
     });
@@ -77,8 +78,8 @@ const deleteLikes = (req, res) => {
       return res.status(HTTP_STATUS_OK).send({ data: card });
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        return castError(res);
+      if (err instanceof CastError) {
+        return castErrorAnswer(res);
       }
       return serverError(res);
     });

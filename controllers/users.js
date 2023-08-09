@@ -1,8 +1,9 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
+const { CastError, ValidationError } = require('mongoose').Error;
 const userModel = require('../models/user');
 
 const {
-  userNotFound, serverError, validationError, castError,
+  userNotFound, serverError, validationErrorAnswer, castErrorAnswer,
 } = require('../errors/errors');
 
 const createProfile = (req, res) => userModel.create({ ...req.body })
@@ -10,8 +11,8 @@ const createProfile = (req, res) => userModel.create({ ...req.body })
     res.status(HTTP_STATUS_CREATED).send(user);
   })
   .catch((err) => {
-    if (err.name === 'ValidationError') {
-      return validationError(res, err);
+    if (err instanceof ValidationError) {
+      return validationErrorAnswer(res, err);
     }
     return serverError(res);
   });
@@ -26,8 +27,8 @@ const getProfileById = (req, res) => {
       return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        return castError(res);
+      if (err instanceof CastError) {
+        return castErrorAnswer(res);
       }
       return serverError(res);
     });
@@ -56,8 +57,8 @@ const updateProfile = (req, res) => {
       return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return validationError(res, err);
+      if (err instanceof ValidationError) {
+        return validationErrorAnswer(res, err);
       }
 
       return serverError(res);
@@ -80,8 +81,8 @@ const changeAvatar = (req, res) => {
       return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return validationError(res, err);
+      if (err instanceof ValidationError) {
+        return validationErrorAnswer(res, err);
       }
       return serverError(res);
     });
