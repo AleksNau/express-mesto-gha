@@ -28,12 +28,8 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
   return cardModel.findById(cardId)
-    .orFail(() => {
-      return cardError(res);
-    })
-    .then((card) => {
-      return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }));
-    })
+    .orFail(() => cardError(res))
+    .then(() => cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' })))
     .catch((err) => {
       if (err instanceof CastError) {
         return castErrorAnswer(res);
@@ -49,12 +45,8 @@ const getLikes = (req, res) => {
       { $addToSet: { likes: req.user._id } },
       { new: true },
     )
-    .orFail(() => {
-      return cardError(res);
-    })
-    .then((card) => {
-      return res.status(HTTP_STATUS_OK).send({ data: card });
-    })
+    .orFail(() => cardError(res))
+    .then((card) => res.status(HTTP_STATUS_OK).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
         return castErrorAnswer(res);
@@ -71,12 +63,8 @@ const deleteLikes = (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     )
-    .orFail(() => {
-      return cardError(res);
-    })
-    .then((card) => {
-      return res.status(HTTP_STATUS_OK).send({ data: card });
-    })
+    .orFail(() => cardError(res))
+    .then((card) => res.status(HTTP_STATUS_OK).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
         return castErrorAnswer(res);

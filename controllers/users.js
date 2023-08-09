@@ -20,12 +20,8 @@ const createProfile = (req, res) => userModel.create({ ...req.body })
 const getProfileById = (req, res) => {
   const { id } = req.params;
   return userModel.findById(id)
-    .orFail(() => {
-      return userNotFound(res);
-    })
-    .then((user) => {
-      return res.status(HTTP_STATUS_OK).send(user);
-    })
+    .orFail(() => userNotFound(res))
+    .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof CastError) {
         return castErrorAnswer(res);
@@ -50,12 +46,8 @@ const updateProfile = (req, res) => {
       { name, about },
       { new: true, runValidators: true },
     )
-    .orFail(() => {
-      return userNotFound(res);
-    })
-    .then((user) => {
-      return res.status(HTTP_STATUS_OK).send(user);
-    })
+    .orFail(() => userNotFound(res))
+    .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
         return validationErrorAnswer(res, err);
