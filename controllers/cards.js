@@ -28,10 +28,10 @@ const createCard = (req, res) => {
 const deleteCard = (req, res) => {
   const { cardId } = req.params;
   return cardModel.findById(cardId)
+    .orFail(() => {
+      return cardError(res);
+    })
     .then((card) => {
-      if (!card) {
-        return cardError(res);
-      }
       return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }));
     })
     .catch((err) => {
@@ -49,10 +49,10 @@ const getLikes = (req, res) => {
       { $addToSet: { likes: req.user._id } },
       { new: true },
     )
+    .orFail(() => {
+      return cardError(res);
+    })
     .then((card) => {
-      if (!card) {
-        return cardError(res);
-      }
       return res.status(HTTP_STATUS_OK).send({ data: card });
     })
     .catch((err) => {
@@ -71,10 +71,10 @@ const deleteLikes = (req, res) => {
       { $pull: { likes: req.user._id } },
       { new: true },
     )
+    .orFail(() => {
+      return cardError(res);
+    })
     .then((card) => {
-      if (!card) {
-        return cardError(res);
-      }
       return res.status(HTTP_STATUS_OK).send({ data: card });
     })
     .catch((err) => {

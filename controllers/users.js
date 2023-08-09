@@ -20,10 +20,10 @@ const createProfile = (req, res) => userModel.create({ ...req.body })
 const getProfileById = (req, res) => {
   const { id } = req.params;
   return userModel.findById(id)
+    .orFail(() => {
+      return userNotFound(res);
+    })
     .then((user) => {
-      if (!user) {
-        return userNotFound(res);
-      }
       return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
@@ -50,10 +50,10 @@ const updateProfile = (req, res) => {
       { name, about },
       { new: true, runValidators: true },
     )
+    .orFail(() => {
+      return userNotFound(res);
+    })
     .then((user) => {
-      if (!user) {
-        return userNotFound(res);
-      }
       return res.status(HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
