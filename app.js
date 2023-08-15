@@ -1,5 +1,8 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
+const {
+  createProfile, login
+} = require('./controllers/users');
 require('dotenv').config();
 
 const { PORT = 3000, MONGODB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
@@ -30,3 +33,6 @@ app.use(router);
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
+
+app.post('/signin', login);
+app.post('/signup', createProfile);

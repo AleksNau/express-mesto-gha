@@ -81,10 +81,25 @@ const changeAvatar = (req, res) => {
   // 400,404,500
 };
 
+const login = (req, res) => {
+  const { email,password } = req.params;
+  /*return что-то
+    .orFail(() => userNotFound(res))
+    .then(() => res.status(HTTP_STATUS_OK).send())
+    .catch((err) => {
+      if (err instanceof CastError) {
+        return castErrorAnswer(res);
+      }
+      return serverError(res);
+    });
+  // 404,500*/
+};
+
 module.exports = {
   createProfile,
   getProfileById,
   getUsersList,
   updateProfile,
   changeAvatar,
+  login
 };
