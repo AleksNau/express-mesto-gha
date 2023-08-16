@@ -1,7 +1,11 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require("http2").constants;
 const { CastError, ValidationError } = require("mongoose").Error;
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 const userModel = require("../models/user");
+const {SECRET_CODE = 'SECRET'} = process.env;
+
+
 const saltRounds = 10;
 
 const {
@@ -44,13 +48,25 @@ const getProfileById = (req, res) => {
   // 404,500
 };
 
-const getUsersList = (req, res) =>
+const getUsersList = (req, res) =>{
+  //Закрываем роут токеном
+  const token = req.headers.authorization;//проверить правильность и закинуть токен в хэдер
+  jwt.verify(token, SECRET_CODE, function(err, decoded) {
+    if(err) return res.status(401).send({ message: 'необходима авторизация' });
+    userModel.findById(decoded._id)
+    .then((user) => {
+      if(!user) return res.status(401).send({ message: 'необходима авторизация' });
+      res.status(HTTP_STATUS_OK).send(user);
+    })
+    .catch(() => serverError(res));
+    console.log(decoded.foo) // bar
+  });
   userModel
     .find()
     .then((users) => {
       res.status(HTTP_STATUS_OK).send(users);
     })
-    .catch(() => serverError(res));
+    .catch(() => serverError(res));}
 // 400,500
 
 const updateProfile = (req, res) => {
@@ -108,7 +124,8 @@ const login = (req, res) => {
       if(!result) {
         return res.status(404).send({ message: 'пароль не верный' })
       }
-      res.status(HTTP_STATUS_OK).send({message:'пароль верный'})
+      const token = jwt.sign({ _id: user._id, email: user.email }, SECRET_CODE);
+      res.status(HTTP_STATUS_OK).send({token})
       // result == true
   });
   })
