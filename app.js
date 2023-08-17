@@ -27,6 +27,8 @@ module.exports.createCard = () => {
 const router = require('./routes/index');
 
 app.use(express.json());
+app.post('/signin', login);
+app.post('/signup', createProfile);
 // подключили роуты юзера
 app.use(router);
 
@@ -34,5 +36,4 @@ app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
 
-app.post('/signin', login);
-app.post('/signup', createProfile);
+

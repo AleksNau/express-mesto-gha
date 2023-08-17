@@ -113,7 +113,7 @@ const changeAvatar = (req, res) => {
 };
 
 const login = (req, res) => {
-  const { email, password } = req.params;
+  const { email, password } = req.body;
   userModel.findOne({email})
   .then((user) => {
     if (!user) {
