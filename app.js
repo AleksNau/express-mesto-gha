@@ -1,5 +1,6 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
+
 const {
   createProfile, login
 } = require('./controllers/users');
