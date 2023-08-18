@@ -50,7 +50,7 @@ const getProfileById = (req, res) => {
 
 const getUsersList = (req, res) =>{
   //Закрываем роут токеном
-  const token = req.headers.authorization;//проверить правильность и закинуть токен в хэдер
+ /* const token = req.headers.authorization;//проверить правильность и закинуть токен в хэдер
   jwt.verify(token, SECRET_CODE, function(err, decoded) {
     if(err) return res.status(401).send({ message: 'необходима авторизация' });
     userModel.findById(decoded._id)
@@ -60,7 +60,7 @@ const getUsersList = (req, res) =>{
     })
     .catch(() => serverError(res));
     console.log(decoded.foo) // bar
-  });
+  });*/
   userModel
     .find()
     .then((users) => {
