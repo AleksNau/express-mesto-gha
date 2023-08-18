@@ -16,22 +16,40 @@ const {
 } = require("../errors/errors");
 
 const createProfile = (req, res) => {
-  const { password, name, email, avatar, about } = req.body;
-  bcrypt
-    .hash(password, saltRounds)
-    .then(
-      (hash) => userModel.create({ password: hash, name, email, avatar, about }) // ...req.body
-    )
-    .then((user) => {
-      res.status(HTTP_STATUS_CREATED).send(user);
-    })
-    .catch((err) => {
-      if (err instanceof ValidationError) {
-        return validationErrorAnswer(res, err);
-      }
-      return serverError(res);
-    });
-};
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, 10).then((hash) => {
+    userModel
+      .create({
+        name, about, avatar, email, password: hash,
+      })
+      .then(() => res.status(201).send(
+        {
+          data: {
+            name, about, avatar, email,
+          },
+        },
+      ))
+      .catch((err) => {
+        if (err.code === 11000) {
+          return res.status(404).send({ message: 'Пользователь с таким email уже существует' });
+        }
+        if (err instanceof ValidationError) {
+          return validationErrorAnswer(res, err);
+        }
+        return serverError(res);
+      });
+  })
+};;
+
+
+
+
+
+
+
+
 
 const getProfileById = (req, res) => {
   const { id } = req.params;
