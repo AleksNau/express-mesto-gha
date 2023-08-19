@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const userModel = require("../models/user");
 const {SECRET_CODE = 'SECRET'} = process.env;
+const {isAuthorized} = require('../utils/jwt')
 
 
 const saltRounds = 10;
@@ -67,18 +68,10 @@ const getProfileById = (req, res) => {
 };
 
 const getUsersList = (req, res) =>{
-  //Закрываем роут токеном
- /* const token = req.headers.authorization;//проверить правильность и закинуть токен в хэдер
-  jwt.verify(token, SECRET_CODE, function(err, decoded) {
-    if(err) return res.status(401).send({ message: 'необходима авторизация' });
-    userModel.findById(decoded._id)
-    .then((user) => {
-      if(!user) return res.status(401).send({ message: 'необходима авторизация' });
-      res.status(HTTP_STATUS_OK).send(user);
-    })
-    .catch(() => serverError(res));
-    console.log(decoded.foo) // bar
-  });*/
+  const token = req.headers.authorization;//в мидлаваре
+ /* if(!isAuthorized(token)){
+    return res.status(401).send({ message: 'необходима авторизация' });
+  }*/
   userModel
     .find()
     .then((users) => {
