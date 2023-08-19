@@ -15,6 +15,7 @@ const {
   validationErrorAnswer,
   castErrorAnswer,
 } = require("../errors/errors");
+const {unauthorizedError} = require("../errors/unauthorizedError");
 
 const createProfile = (req, res) => {
   const {
@@ -67,7 +68,7 @@ const getProfileById = (req, res) => {
   // 404,500
 };
 
-const getUsersList = (req, res) =>{
+const getUsersList = (req, res,next) =>{
   const token = req.headers.authorization;//в мидлаваре
  /* if(!isAuthorized(token)){
     return res.status(401).send({ message: 'необходима авторизация' });
@@ -77,7 +78,7 @@ const getUsersList = (req, res) =>{
     .then((users) => {
       res.status(HTTP_STATUS_OK).send(users);
     })
-    .catch(() => serverError(res));}
+    .catch(() => {next(new unauthorizedError())})}
 // 400,500
 
 const updateProfile = (req, res) => {

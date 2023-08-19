@@ -1,6 +1,7 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 const {auth} = require('./middlewares/auth')
+const errorHandler = require('./middlewares/error-handler')
 
 const {
   createProfile, login
@@ -33,6 +34,7 @@ app.use(auth)
 app.post('/signin', login);
 app.post('/signup', createProfile);
 // подключили роуты юзера
+app.use(errorHandler)
 app.use(router);
 
 app.listen(PORT, () => {
