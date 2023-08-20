@@ -14,11 +14,11 @@ const isAuthorized = (token) => {
     if(err) return false;
     return userModel.findById(decoded._id)
       .then((user) => {
+
         return Boolean(user);
         //res.status(HTTP_STATUS_OK).send(user);
       })
       .catch(() => false);
-   // console.log(decoded.foo) // bar
   });
 }
 module.exports = {
