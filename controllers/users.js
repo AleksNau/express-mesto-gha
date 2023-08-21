@@ -76,9 +76,7 @@ const updateProfile = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        next(new BadRequestError({
-          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-        }));
+        next(new BadRequestError('Переданы некорректные данные при создании карточки'));
       }
       next(err);
     });
@@ -99,9 +97,7 @@ const changeAvatar = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        next(new BadRequestError({
-          message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-        }));
+        next(new BadRequestError('Переданы некорректные данные при создании карточки'));
       }
       next(err);
     });

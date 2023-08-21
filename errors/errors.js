@@ -1,7 +1,6 @@
 const {
   HTTP_STATUS_INTERNAL_SERVER_ERROR
 } = require('http2').constants; 
-const serverError = require('./serverError');
 const cardError = require('./cardNotFound');
 const castErrorAnswer = require('./castError');
 const validationErrorAnswer = require('./validationError');
@@ -27,7 +26,6 @@ module.exports = {
   NotFoundError,
   errorHandler,
   validationErrorAnswer,
-  serverError,
   cardError,
   castErrorAnswer,
   userNotFound
