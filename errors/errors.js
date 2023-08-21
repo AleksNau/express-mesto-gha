@@ -1,5 +1,5 @@
 const {
-  HTTP_STATUS_INTERNAL_SERVER_ERROR,
+  HTTP_STATUS_BAD_REQUEST,
 } = require('http2').constants;
 const UserAlreadyExistsError = require('./UserAlreadyExistsError');
 const ForbiddenError = require('./ForbiddenError');
@@ -8,8 +8,8 @@ const BadRequestError = require('./BadRequestError');
 const NotFoundError = require('./NotFoundError');
 
 const errorHandler = (err, req, res, next) => {
-  const statusCode = err.statusCode || HTTP_STATUS_INTERNAL_SERVER_ERROR;
-  const message = statusCode === HTTP_STATUS_INTERNAL_SERVER_ERROR ? 'на сервере ошибка' : err.message;
+  const statusCode = err.statusCode || HTTP_STATUS_BAD_REQUEST;
+  const message = statusCode === HTTP_STATUS_BAD_REQUEST ? 'на сервере ошибка' : err.message;
   res.status(statusCode).send({ message });
   next(err);
 };
