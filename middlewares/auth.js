@@ -12,5 +12,5 @@ module.exports = (req, res, next) => {
   const payload = jwt.verify(token, SECRET_CODE);
   req.user = payload;
 
-  return next();
+  next();
 };
