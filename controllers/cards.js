@@ -4,8 +4,7 @@ const cardModel = require('../models/cards');
 const {
   BadRequestError,
   NotFoundError,
-  ForbiddenError, 
-  castErrorAnswer
+  ForbiddenError
 } = require('../errors/errors');
 
 const getCards = (req, res,next) => cardModel.find()

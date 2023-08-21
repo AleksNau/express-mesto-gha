@@ -1,10 +1,6 @@
 const {
   HTTP_STATUS_INTERNAL_SERVER_ERROR
 } = require('http2').constants; 
-const cardError = require('./cardNotFound');
-const castErrorAnswer = require('./castError');
-const validationErrorAnswer = require('./validationError');
-const userNotFound = require('./userNotFound');
 const UserAlreadyExistsError = require('./UserAlreadyExistsError')
 const ForbiddenError = require('./ForbiddenError')
 const NotAuthorizedError = require('./NotAuthorizedError')
@@ -17,16 +13,12 @@ const errorHandler = (err, req, res, next) => {
   res.status(statusCode).send({ message });
   next(err);
 };
-
+// message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`
 module.exports = {
   UserAlreadyExistsError,
   ForbiddenError,
   NotAuthorizedError,
   BadRequestError,
   NotFoundError,
-  errorHandler,
-  validationErrorAnswer,
-  cardError,
-  castErrorAnswer,
-  userNotFound
+  errorHandler
 };

@@ -9,7 +9,6 @@ const isAuthorized = (token) => jwt.verify(token, SECRET_CODE, (err, decoded) =>
   if (err) return false;
   return userModel.findById(decoded._id)
     .then((user) => Boolean(user))
-  // res.status(HTTP_STATUS_OK).send(user);
     .catch(() => false);
 });
 module.exports = {
