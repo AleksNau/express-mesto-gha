@@ -1,11 +1,11 @@
 const {
-  HTTP_STATUS_INTERNAL_SERVER_ERROR
-} = require('http2').constants; 
-const UserAlreadyExistsError = require('./UserAlreadyExistsError')
-const ForbiddenError = require('./ForbiddenError')
-const NotAuthorizedError = require('./NotAuthorizedError')
-const BadRequestError = require('./BadRequestError')
-const NotFoundError = require('./NotFoundError')
+  HTTP_STATUS_INTERNAL_SERVER_ERROR,
+} = require('http2').constants;
+const UserAlreadyExistsError = require('./UserAlreadyExistsError');
+const ForbiddenError = require('./ForbiddenError');
+const NotAuthorizedError = require('./NotAuthorizedError');
+const BadRequestError = require('./BadRequestError');
+const NotFoundError = require('./NotFoundError');
 
 const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || HTTP_STATUS_INTERNAL_SERVER_ERROR;
@@ -20,5 +20,5 @@ module.exports = {
   NotAuthorizedError,
   BadRequestError,
   NotFoundError,
-  errorHandler
+  errorHandler,
 };

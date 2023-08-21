@@ -1,7 +1,9 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
-const { auth } = require('./middlewares/auth');
+const helmet = require('helmet');
+const auth = require('./middlewares/auth');
 const { errorHandler } = require('./errors/errors');
+const { validationCreateUser, validationLogin } = require('./middlewares/validation');
 
 const {
   createProfile, login,
@@ -24,12 +26,13 @@ const router = require('./routes/index');
 
 app.use(express.json());
 
-app.post('/signin', login);
-app.post('/signup', createProfile);
+app.post('/signin', validationLogin, login);
+app.post('/signup', validationCreateUser, createProfile);
 
 // подключили роуты юзера
 app.use(auth);
 app.use(router);
+app.use(helmet());
 
 app.use(errorHandler);
 app.listen(PORT, () => {

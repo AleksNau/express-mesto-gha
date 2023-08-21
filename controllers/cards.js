@@ -4,12 +4,12 @@ const cardModel = require('../models/cards');
 const {
   BadRequestError,
   NotFoundError,
-  ForbiddenError
+  ForbiddenError,
 } = require('../errors/errors');
 
-const getCards = (req, res,next) => cardModel.find()
+const getCards = (req, res, next) => cardModel.find()
   .then((users) => res.status(HTTP_STATUS_OK).send(users))
-  .catch(next);;// 400,500
+  .catch(next);// 400,500
 
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
@@ -24,22 +24,22 @@ const createCard = (req, res, next) => {
       } else {
         next(err);
       }
-
     });
 };// 400,500
 
-const deleteCard = (req, res,next) => {
+const deleteCard = (req, res, next) => {
   const { cardId } = req.params;
   return cardModel.findById(cardId)
-  .orFail(() => {
-    throw new NotFoundError('Запрашиваемая карточка не найдена');
-  })
-    .then(() => {
+    .orFail(() => {
+      throw new NotFoundError('Запрашиваемая карточка не найдена');
+    })
+    .then((card) => {
       if (!card.owner.equals(req.user._id)) {
         return next(new ForbiddenError('Вы не можете удалить чужую карточку'));
       }
-      return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }))})
-      .catch(next);
+      return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }));
+    })
+    .catch(next);
 };// 404
 
 const getLikes = (req, res, next) => {
@@ -62,7 +62,7 @@ const getLikes = (req, res, next) => {
 // 400,404,500
 };
 // убрать лайк
-const deleteLikes = (req, res,next) => {
+const deleteLikes = (req, res, next) => {
   cardModel
     .findByIdAndUpdate(
       req.params.cardId,
