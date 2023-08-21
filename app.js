@@ -1,10 +1,10 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
-const {auth} = require('./middlewares/auth')
-const {errorHandler} = require('./errors/errors')
+const { auth } = require('./middlewares/auth');
+const { errorHandler } = require('./errors/errors');
 
 const {
-  createProfile, login
+  createProfile, login,
 } = require('./controllers/users');
 require('dotenv').config();
 
@@ -28,13 +28,10 @@ app.post('/signin', login);
 app.post('/signup', createProfile);
 
 // подключили роуты юзера
-app.use(auth)
+app.use(auth);
 app.use(router);
 
-app.use(errorHandler)
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
-  //console.log(costa)
 });
-
-

@@ -1,19 +1,14 @@
-const { HTTP_STATUS_OK, HTTP_STATUS_CREATED,HTTP_STATUS_FORBIDDEN } = require("http2").constants;
-const { CastError, ValidationError } = require("mongoose").Error;
-const bcrypt = require("bcrypt");
-const userSchema = require("../models/user");
-const {getJwtToken} = require('../utils/jwt')
+const { HTTP_STATUS_OK, HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN } = require('http2').constants;
+const { CastError, ValidationError } = require('mongoose').Error;
+const bcrypt = require('bcrypt');
+const userSchema = require('../models/user');
+const { getJwtToken } = require('../utils/jwt');
 
 const {
-  userNotFound,
-  serverError,
-  validationErrorAnswer,
-  castErrorAnswer,
   BadRequestError,
   NotFoundError,
-  UserAlreadyExistsError
-} = require("../errors/errors");
-const {unauthorizedError} = require("../errors/unauthorizedError");
+  UserAlreadyExistsError,
+} = require('../errors/errors');
 
 const createProfile = (req, res, next) => {
   const {
@@ -25,7 +20,7 @@ const createProfile = (req, res, next) => {
         name, about, avatar, email, password: hash,
       })
       .then((user) => res.status(HTTP_STATUS_CREATED).send(
-        user
+        user,
 
       ))
       .catch((err) => {
@@ -37,33 +32,34 @@ const createProfile = (req, res, next) => {
             message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
           }));
         }
-        next(err)
+        next(err);
       });
-
-  })
+  });
 };
 
-const getProfileById = (req, res,next) => {
+const getProfileById = (req, res, next) => {
   const { id } = req.params;
   return userSchema
     .findById(id)
     .orFail(() => {
-       throw new NotFoundError('Запрашиваемый пользователь не найден')})
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
+    })
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
-      if (err instanceof CastError) next(new BadRequestError('Передан некорретный Id'))
+      if (err instanceof CastError) next(new BadRequestError('Передан некорретный Id'));
       next(err);
     });
   // 404,500
 };
 
-const getUsersList = (req, res,next) =>{
+const getUsersList = (req, res, next) => {
   userSchema
     .find()
     .then((users) => {
       res.status(HTTP_STATUS_OK).send(users);
     })
-    .catch(next)}
+    .catch(next);
+};
 // 400,500 next(new unauthorizedError())})
 
 const updateProfile = (req, res, next) => {
@@ -72,10 +68,11 @@ const updateProfile = (req, res, next) => {
     .findByIdAndUpdate(
       req.user._id,
       { name, about },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     )
     .orFail(() => {
-      throw new NotFoundError('Запрашиваемый пользователь не найден')})
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
+    })
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
@@ -83,51 +80,51 @@ const updateProfile = (req, res, next) => {
           message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
         }));
       }
-      next(err)
+      next(err);
     });
   // 400,404,500
 };
 
-const changeAvatar = (req, res,next) => {
+const changeAvatar = (req, res, next) => {
   const { avatar } = req.body;
   userSchema
     .findByIdAndUpdate(
       req.user._id,
       { avatar },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     )
     .orFail(() => {
-      throw new NotFoundError('Запрашиваемый пользователь не найден')})
-    .then((user) => {
-      return res.status(HTTP_STATUS_OK).send(user);
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
     })
+    .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
         next(new BadRequestError({
           message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
         }));
       }
-      next(err)
+      next(err);
     });
   // 400,404,500
 };
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  userSchema.findOne({email}).select('+password')
+  userSchema.findOne({ email }).select('+password')
     .orFail(() => {
-      throw new NotFoundError('Запрашиваемый пользователь не найден')})
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
+    })
     .then((user) => {
       bcrypt.compare(password, user.password)
-    .then((result) => {
-      if(!result) {
-        return res.status(HTTP_STATUS_FORBIDDEN).send({ message: 'пароль не верный' })
-      }
-      const token = getJwtToken({ _id: user._id, email: user.email });
-      res.status(HTTP_STATUS_OK).send({token})
-  });
-  })
-  .catch(next);
+        .then((result) => {
+          if (!result) {
+            return res.status(HTTP_STATUS_FORBIDDEN).send({ message: 'пароль не верный' });
+          }
+          const token = getJwtToken({ _id: user._id, email: user.email });
+          return res.status(HTTP_STATUS_OK).send({ token });
+        });
+    })
+    .catch(next);
   // 404,500*/
 };
 

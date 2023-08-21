@@ -1,23 +1,23 @@
-const {isAuthorized} = require('../utils/jwt')
 const jwt = require('jsonwebtoken');
-const {SECRET_CODE = 'SECRET'} = process.env;
-const {unauthorizedError} = require('../errors/unauthorizedError')
+const { isAuthorized } = require('../utils/jwt');
 
-const auth = (req,res,next) => {
-  const token = req.headers.authorization;//req.cookie.jwt
-  if(!isAuthorized(token)){
-    next(new unauthorizedError('необходима авторизация'))
+const { SECRET_CODE = 'SECRET' } = process.env;
+const { UnauthorizedError } = require('../errors/unauthorizedError');
+
+const auth = (req, res, next) => {
+  const token = req.headers.authorization;// req.cookie.jwt
+  if (!isAuthorized(token)) {
+    next(new UnauthorizedError('Необходима авторизация'));
   }
   let payload;
   try {
     payload = jwt.verify(token, SECRET_CODE);
   } catch (err) {
-    return next(new unauthorizedError('необходима авторизация'))
+    return next(new UnauthorizedError('Необходима авторизация'));
   }
   req.user = payload;
 
   next();
-}
+};
 
-
-module.exports = {auth};
+module.exports = { auth };
