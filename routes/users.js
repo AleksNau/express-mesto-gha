@@ -10,13 +10,13 @@ const {
 // создание пользователя
 router.post('/', createProfile);
 // получить пользователя по id
-router.get('/:id', validationUserId, getProfileById);
+router.get('/:id', getProfileById);
 
 // получить всех пользователей
 router.get('/', getUsersList);
-
-router.patch('/me', validationUpdateUser, updateProfile);
-
-router.patch('/me/avatar', validationUpdateAvatar, changeAvatar);
+//validationUpdateUser
+router.patch('/me', updateProfile);
+//validationUpdateAvatar
+router.patch('/me/avatar', changeAvatar);
 
 module.exports = router;

@@ -28,9 +28,7 @@ const createProfile = (req, res, next) => {
           next(new UserAlreadyExistsError('Пользователь с таким email уже существует'));
         }
         if (err instanceof ValidationError) {
-          next(new BadRequestError({
-            message: `${Object.values(err.errors).map((item) => item.message).join(', ')}`,
-          }));
+          next(new BadRequestError(`Ошибка валидации: ${err.message}`));
         }
         next(err);
       });
@@ -46,8 +44,10 @@ const getProfileById = (req, res, next) => {
     })
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
-      if (err instanceof CastError) next(new BadRequestError('Передан некорретный Id'));
-      next(err);
+      //не проходит кастэрор
+      if (err instanceof CastError) {next(new BadRequestError('Передан некорретный Id'))}
+      else{ next(err);}
+     
     });
   // 404,500
 };
@@ -63,11 +63,11 @@ const getUsersList = (req, res, next) => {
 // 400,500 next(new unauthorizedError())})
 
 const updateProfile = (req, res, next) => {
-  const { name, about } = req.body;
+  const { name, about,email } = req.body;
   userSchema
     .findByIdAndUpdate(
       req.user._id,
-      { name, about },
+      { name, about,email },
       { new: true, runValidators: true },
     )
     .orFail(() => {
@@ -75,8 +75,9 @@ const updateProfile = (req, res, next) => {
     })
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
+      //не работает валидация
       if (err instanceof ValidationError) {
-        next(new BadRequestError('Переданы некорректные данные при создании карточки'));
+        next(new BadRequestError('Переданы некорректные данные при обновлении карточки'));
       }
       next(err);
     });
@@ -97,7 +98,7 @@ const changeAvatar = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        next(new BadRequestError('Переданы некорректные данные при создании карточки'));
+        next(new BadRequestError(`Ошибка валидации: ${err.message}`));
       }
       next(err);
     });
@@ -114,7 +115,7 @@ const login = (req, res, next) => {
       bcrypt.compare(password, user.password)
         .then((result) => {
           if (!result) {
-            return res.status(HTTP_STATUS_FORBIDDEN).send({ message: 'пароль не верный' });
+            return res.status(HTTP_STATUS_FORBIDDEN).send({ message: 'Пароль неверный' });
           }
           const token = getJwtToken({ _id: user._id, email: user.email });
           return res.status(HTTP_STATUS_OK).send({ token });
