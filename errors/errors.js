@@ -17,12 +17,9 @@ const errorHandler = (err, req, res, next) => {
 };
 
 module.exports = {
-  validationErrorAnswer,
   serverError,
-  cardError,
   castErrorAnswer,
-  userNotFound,
   BadRequestError,
   NotFoundError,
-  errorHandler,
+  errorHandler
 };
