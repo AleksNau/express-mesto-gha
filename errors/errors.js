@@ -4,6 +4,9 @@ const {
 const serverError = require('./serverError');
 const BadRequestError = require('./BadRequestError');
 const NotFoundError = require('./NotFoundError');
+const ConflictError = require('./ConflictError');
+const ForbiddenError = require('./ForbiddenError');
+const UnauthorizedError = require('./UnauthorizedError');
 
 const errorHandler = (err, req, res, next) => {
   const statusCode = err.statusCode || HTTP_STATUS_BAD_REQUEST;
@@ -32,5 +35,8 @@ module.exports = {
   serverError,
   BadRequestError,
   NotFoundError,
+  ConflictError,
+  ForbiddenError,
+  UnauthorizedError,
   errorHandler,
 };

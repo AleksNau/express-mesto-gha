@@ -42,11 +42,11 @@ const getUsersList = (req, res, next) => userModel.find()
 // 400,500
 
 const updateProfile = (req, res, next) => {
-  const { name, about } = req.body;
+  const { name, about, email } = req.body;
   userModel
     .findByIdAndUpdate(
       req.user._id,
-      { name, about },
+      { name, about, email },
       { new: true, runValidators: true },
     )
     .orFail(() => {
