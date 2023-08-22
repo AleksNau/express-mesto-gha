@@ -3,7 +3,7 @@ const { CastError, ValidationError } = require('mongoose').Error;
 const cardModel = require('../models/cards');
 
 const {
-  castErrorAnswer, BadRequestError,
+  BadRequestError,
   NotFoundError,
 } = require('../errors/errors');
 
@@ -35,7 +35,7 @@ const deleteCard = (req, res, next) => {
     .then(() => cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' })))
     .catch((err) => {
       if (err instanceof CastError) {
-        return castErrorAnswer(res);
+        next(new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });
@@ -54,7 +54,7 @@ const getLikes = (req, res, next) => {
     .then((card) => res.status(HTTP_STATUS_OK).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
-        return castErrorAnswer(res);
+        next(new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });
@@ -74,7 +74,7 @@ const deleteLikes = (req, res, next) => {
     .then((card) => res.status(HTTP_STATUS_OK).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
-        return castErrorAnswer(res);
+        next(new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });

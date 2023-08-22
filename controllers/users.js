@@ -3,7 +3,6 @@ const { CastError, ValidationError } = require('mongoose').Error;
 const userModel = require('../models/user');
 
 const {
-  castErrorAnswer,
   BadRequestError,
   NotFoundError,
 } = require('../errors/errors');
@@ -28,7 +27,7 @@ const getProfileById = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof CastError) {
-        return castErrorAnswer(res);
+        next(new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });

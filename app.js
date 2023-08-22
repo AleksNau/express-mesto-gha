@@ -1,7 +1,7 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
-const { errorHandler } = require('./errors/errors');
+// const { errorHandler } = require('./errors/errors');
 
 const { PORT = 3000, MONGODB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
@@ -29,7 +29,20 @@ app.use(express.json());
 
 app.use(router);
 
-app.use(errorHandler);
+app.use((err, req, res, next) => {
+  // если у ошибки нет статуса, выставляем 500
+  const { statusCode = 500, message } = err;
+
+  res
+    .status(statusCode)
+    .send({
+      // проверяем статус и выставляем сообщение в зависимости от него
+      message: statusCode === 500
+        ? 'На сервере произошла ошибка'
+        : message,
+    });
+  next();
+});
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });
