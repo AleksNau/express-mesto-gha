@@ -1,6 +1,7 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
+const { errorHandler } = require('./errors/errors');
 
 const { PORT = 3000, MONGODB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
 
@@ -25,8 +26,10 @@ const router = require('./routes/index');
 
 app.use(express.json());
 // подключили роуты юзера
+
 app.use(router);
 
+app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });

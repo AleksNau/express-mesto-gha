@@ -3,42 +3,46 @@ const { CastError, ValidationError } = require('mongoose').Error;
 const userModel = require('../models/user');
 
 const {
-  userNotFound, serverError, validationErrorAnswer, castErrorAnswer,
+  castErrorAnswer,
+  BadRequestError,
+  NotFoundError,
 } = require('../errors/errors');
 
-const createProfile = (req, res) => userModel.create({ ...req.body })
+const createProfile = (req, res, next) => userModel.create({ ...req.body })
   .then((user) => {
     res.status(HTTP_STATUS_CREATED).send(user);
   })
   .catch((err) => {
     if (err instanceof ValidationError) {
-      return validationErrorAnswer(res, err);
+      next(new BadRequestError(`Ошибка валидации: ${err.message}`));
     }
-    return serverError(res);
+    next(err);
   });
 
-const getProfileById = (req, res) => {
+const getProfileById = (req, res, next) => {
   const { id } = req.params;
   return userModel.findById(id)
-    .orFail(() => userNotFound(res))
+    .orFail(() => {
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
+    })
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof CastError) {
         return castErrorAnswer(res);
       }
-      return serverError(res);
+      return next(err);
     });
   // 404,500
 };
 
-const getUsersList = (req, res) => userModel.find()
+const getUsersList = (req, res, next) => userModel.find()
   .then((users) => {
     res.status(HTTP_STATUS_OK).send(users);
   })
-  .catch(() => serverError(res));
+  .catch(next);
 // 400,500
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const { name, about } = req.body;
   userModel
     .findByIdAndUpdate(
@@ -46,19 +50,21 @@ const updateProfile = (req, res) => {
       { name, about },
       { new: true, runValidators: true },
     )
-    .orFail(() => userNotFound(res))
+    .orFail(() => {
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
+    })
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        return validationErrorAnswer(res, err);
+        next(new BadRequestError(`Ошибка валидации: ${err.message}`));
       }
 
-      return serverError(res);
+      next(err);
     });
   // 400,404,500
 };
 
-const changeAvatar = (req, res) => {
+const changeAvatar = (req, res, next) => {
   const { avatar } = req.body;
   userModel
     .findByIdAndUpdate(
@@ -66,17 +72,15 @@ const changeAvatar = (req, res) => {
       { avatar },
       { new: true, runValidators: true },
     )
-    .then((user) => {
-      if (!user) {
-        return userNotFound(res);
-      }
-      return res.status(HTTP_STATUS_OK).send(user);
+    .orFail(() => {
+      throw new NotFoundError('Запрашиваемый пользователь не найден');
     })
+    .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        return validationErrorAnswer(res, err);
+        next(new BadRequestError(`Ошибка валидации: ${err.message}`));
       }
-      return serverError(res);
+      next(err);
     });
   // 400,404,500
 };
