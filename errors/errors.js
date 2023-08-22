@@ -2,10 +2,7 @@ const {
   HTTP_STATUS_BAD_REQUEST,
 } = require('http2').constants;
 const serverError = require('./serverError');
-const cardError = require('./cardNotFound');
 const castErrorAnswer = require('./castError');
-const validationErrorAnswer = require('./validationError');
-const userNotFound = require('./userNotFound');
 const BadRequestError = require('./BadRequestError');
 const NotFoundError = require('./NotFoundError');
 
@@ -21,5 +18,5 @@ module.exports = {
   castErrorAnswer,
   BadRequestError,
   NotFoundError,
-  errorHandler
+  errorHandler,
 };
