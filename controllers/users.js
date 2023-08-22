@@ -1,5 +1,6 @@
 const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
 const { CastError, ValidationError } = require('mongoose').Error;
+const bcrypt = require('bcrypt');
 const userModel = require('../models/user');
 
 const {
@@ -7,16 +8,18 @@ const {
   NotFoundError,
 } = require('../errors/errors');
 
-const createProfile = (req, res, next) => userModel.create({ ...req.body })
-  .then((user) => {
-    res.status(HTTP_STATUS_CREATED).send(user);
-  })
-  .catch((err) => {
-    if (err instanceof ValidationError) {
-      next(new BadRequestError(`Ошибка валидации: ${err.message}`));
-    }
-    next(err);
-  });
+const createProfile = (req, res, next) => {
+  userModel.create({ ...req.body })
+    .then((user) => {
+      res.status(HTTP_STATUS_CREATED).send(user);
+    })
+    .catch((err) => {
+      if (err instanceof ValidationError) {
+        next(new BadRequestError(`Ошибка валидации: ${err.message}`));
+      }
+      next(err);
+    });
+};
 
 const getProfileById = (req, res, next) => {
   const { id } = req.params;
