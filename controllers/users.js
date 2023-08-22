@@ -114,22 +114,29 @@ const changeAvatar = (req, res, next) => {
   // 400,404,500
 };
 
+// текущий пользователь
+const getCurrentUser = (req, res, next) => {
+  userModel.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Пользователь не найден');
+      }
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Переданы некорректные данные'));
+      } else if (err.message === 'NotFound') {
+        next(new NotFoundError('Пользователь не найден'));
+      } else next(err);
+    });}
+
 module.exports = {
   createProfile,
   getProfileById,
   getUsersList,
   updateProfile,
   changeAvatar,
+  getCurrentUser,
   login,
-};
-
-module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
-  return userModel
-    .findUserByCredentials(email, password)
-    .then((user) => {
-      const token = getJwtToken({ _id: user._id, email: user.email });
-      res.send({ token });
-    })
-    .catch(next);
 };

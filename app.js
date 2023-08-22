@@ -17,13 +17,6 @@ mongoose.connect(MONGODB_URL, {
 });
 const app = express();
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '64d0a023787b704a2200d0c7', // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
-
-  next();
-});
 module.exports.createCard = () => {
 };
 // импортированили роуты
@@ -53,4 +46,5 @@ app.use((err, req, res, next) => {
 });
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
+
 });
