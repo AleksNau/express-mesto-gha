@@ -2,11 +2,13 @@ const { HTTP_STATUS_OK, HTTP_STATUS_CREATED } = require('http2').constants;
 const { CastError, ValidationError } = require('mongoose').Error;
 const bcrypt = require('bcrypt');
 const userModel = require('../models/user');
+const { getJwtToken } = require('../utils/jwt');
 
 const {
   BadRequestError,
   NotFoundError,
   ConflictError,
+  ForbiddenError,
 } = require('../errors/errors');
 const removePassword = ({ password, ...rest }) => rest
 const createProfile = (req, res, next) => {
@@ -30,6 +32,20 @@ const createProfile = (req, res, next) => {
             });
   });
 };
+
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+   userModel
+    .findUserByCredentials(email, password)
+    .then((user) => {
+      const token = getJwtToken({ _id: user._id, email: user.email });
+      return res.status(HTTP_STATUS_OK).send({ token });
+    })
+    .catch(next);
+};
+
+
+
 
 const getProfileById = (req, res, next) => {
   const { id } = req.params;
@@ -103,4 +119,17 @@ module.exports = {
   getUsersList,
   updateProfile,
   changeAvatar,
+  login,
+};
+
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  return userModel
+    .findUserByCredentials(email, password)
+    .then((user) => {
+      const token = getJwtToken({ _id: user._id, email: user.email });
+      res.send({ token });
+    })
+    .catch(next);
 };

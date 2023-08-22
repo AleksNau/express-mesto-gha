@@ -1,6 +1,10 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
+const {
+  createProfile,
+  login
+} = require('./controllers/users');
 // const { errorHandler } = require('./errors/errors');
 
 const { PORT = 3000, MONGODB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
@@ -26,7 +30,8 @@ const router = require('./routes/index');
 
 app.use(express.json());
 // подключили роуты юзера
-
+app.post('/signin',  login);
+app.post('/signup', createProfile);
 app.use(router);
 
 app.use((err, req, res, next) => {
