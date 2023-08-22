@@ -1,9 +1,10 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 require('dotenv').config();
+const auth = require('./middlewares/auth');
 const {
   createProfile,
-  login
+  login,
 } = require('./controllers/users');
 // const { errorHandler } = require('./errors/errors');
 
@@ -30,8 +31,10 @@ const router = require('./routes/index');
 
 app.use(express.json());
 // подключили роуты юзера
-app.post('/signin',  login);
+app.post('/signin', login);
 app.post('/signup', createProfile);
+
+app.use(auth);
 app.use(router);
 
 app.use((err, req, res, next) => {

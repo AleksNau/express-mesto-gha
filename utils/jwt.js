@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { SECRET_CODE = 'SECRET' } = process.env;
 const userModel = require('../models/user');
 
-const getJwtToken = (payload) => jwt.sign(payload, SECRET_CODE,{
+const getJwtToken = (payload) => jwt.sign(payload, SECRET_CODE, {
   expiresIn: '7d',
 });
 
