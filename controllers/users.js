@@ -6,19 +6,29 @@ const userModel = require('../models/user');
 const {
   BadRequestError,
   NotFoundError,
+  ConflictError,
 } = require('../errors/errors');
-
+const removePassword = ({ password, ...rest }) => rest
 const createProfile = (req, res, next) => {
-  userModel.create({ ...req.body })
-    .then((user) => {
-      res.status(HTTP_STATUS_CREATED).send(user);
-    })
-    .catch((err) => {
-      if (err instanceof ValidationError) {
-        next(new BadRequestError(`Ошибка валидации: ${err.message}`));
-      }
-      next(err);
-    });
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => {
+    userModel.create({name, about, avatar, email, password: hash})
+            .then((user) => {
+              const userInfo = removePassword(req.body)
+              return res.status(HTTP_STATUS_CREATED).send(userInfo)})
+            .catch((err) => {
+              if (err.code === 11000) {
+                next(new ConflictError('Пользователь с таким email уже существует'));
+              }
+              if (err instanceof ValidationError) {
+                next(new BadRequestError(`Ошибка валидации: ${err.message}`));
+              }
+              next(err);
+            });
+  });
 };
 
 const getProfileById = (req, res, next) => {
