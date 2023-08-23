@@ -30,12 +30,12 @@ const createProfile = (req, res, next) => {
         }))
         .catch((err) => {
           if (err.code === 11000) {
-            return ConflictError('Пользователь с таким email уже существует');
+            Promise.reject(new ConflictError('Пользователь с таким email уже существует'));
           }
           if (err instanceof ValidationError) {
-            return BadRequestError(`Ошибка валидации: ${err.message}`);
+            Promise.reject (BadRequestError(`Ошибка валидации: ${err.message}`));
           }
-          return next(err);
+          next(err);
         });
     });
 };
@@ -60,7 +60,7 @@ const getProfileById = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof CastError) {
-        return BadRequestError(`Ошибка Id: ${err.message}`);
+        return new BadRequestError(`Ошибка Id: ${err.message}`);
       }
       return next(err);
     });
@@ -88,10 +88,10 @@ const updateProfile = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        return BadRequestError(`Ошибка валидации: ${err.message}`);
+        return new BadRequestError(`Ошибка валидации: ${err.message}`);
       }
 
-      return next(err);
+      next(err);
     });
   // 400,404,500
 };
@@ -110,9 +110,9 @@ const changeAvatar = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        return BadRequestError(`Ошибка валидации: ${err.message}`);
+        return new BadRequestError(`Ошибка валидации: ${err.message}`);
       }
-      return next(err);
+      next(err);
     });
   // 400,404,500
 };
@@ -128,10 +128,10 @@ const getCurrentUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return BadRequestError('Переданы некорректные данные');
+        return new BadRequestError('Переданы некорректные данные');
       } if (err.message === 'NotFound') {
-        return NotFoundError('Пользователь не найден');
-      } return next(err);
+        return new NotFoundError('Пользователь не найден');
+      } next(err);
     });
 };
 
