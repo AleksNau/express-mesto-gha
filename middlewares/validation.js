@@ -13,14 +13,14 @@ const validationID = (id) => {
 };
 
 // аутенфикация
-module.exports.validationLogin = celebrate({
+const validationLogin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
 });
 // авторизация
-module.exports.validationCreateUser = celebrate({
+const validationCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
@@ -30,34 +30,45 @@ module.exports.validationCreateUser = celebrate({
   }),
 });
 
-module.exports.validationUpdateUser = celebrate({
+const validationUpdateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
     about: Joi.string().min(2).max(30).required(),
   }),
 });
 
-module.exports.validationUpdateAvatar = celebrate({
+const validationUpdateAvatar = celebrate({
   body: Joi.object().keys({
     avatar: Joi.string().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
   }),
 });
-// почемуто не работает
-module.exports.validationUserId = celebrate({
+
+const validationUserId = celebrate({
   params: Joi.object().keys({
     userId: Joi.string().length(24),
   }),
 });
 
-module.exports.validationCreateCard = celebrate({
+const validationCreateCard = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
     link: Joi.string().required().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
   }),
 });
 
-module.exports.validationCardById = celebrate({
+const validationCardById = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().required().custom(validationID),
   }),
 });
+
+
+module.exports = {
+  validationCardById,
+  validationCreateCard,
+  validationUserId,
+  validationUpdateAvatar,
+  validationUpdateUser,
+  validationCreateUser,
+  validationLogin
+}
