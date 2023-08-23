@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-const { validationID, validationURL } = require('../utils/constants');
+const { validationURL } = require('../utils/constants');
 
 const validationLogin = celebrate({
   body: Joi.object().keys({
@@ -33,7 +33,7 @@ const validationUpdateAvatar = celebrate({
 
 const validationUserId = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().length(24),
+    userId: Joi.string().length(24).hex().required(),
   }),
 });
 
@@ -46,7 +46,7 @@ const validationCreateCard = celebrate({
 
 const validationCardById = celebrate({
   params: Joi.object().keys({
-    cardId: Joi.string().required().custom(validationID),
+    cardId: Joi.string().length(24).hex().required(),
   }),
 });
 
