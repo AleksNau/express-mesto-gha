@@ -12,6 +12,8 @@ const validationID = (id) => {
   throw new BadRequestError('Передан некорретный id.');
 };
 
+const validationURL = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
+
 // аутенфикация
 const validationLogin = celebrate({
   body: Joi.object().keys({
@@ -24,7 +26,7 @@ const validationCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
+    avatar: Joi.string().regex(validationURL),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
@@ -39,7 +41,7 @@ const validationUpdateUser = celebrate({
 
 const validationUpdateAvatar = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
+    avatar: Joi.string().regex(validationURL),
   }),
 });
 
@@ -52,7 +54,7 @@ const validationUserId = celebrate({
 const validationCreateCard = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
-    link: Joi.string().required().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
+    link: Joi.string().required().regex(validationURL),
   }),
 });
 
@@ -62,7 +64,6 @@ const validationCardById = celebrate({
   }),
 });
 
-
 module.exports = {
   validationCardById,
   validationCreateCard,
@@ -70,5 +71,5 @@ module.exports = {
   validationUpdateAvatar,
   validationUpdateUser,
   validationCreateUser,
-  validationLogin
-}
+  validationLogin,
+};
