@@ -1,11 +1,15 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
+const { errors } = require('celebrate');
 require('dotenv').config();
+const { validationCreateUser, validationLogin } = require('./middlewares/validation');
 const auth = require('./middlewares/auth');
 const {
   createProfile,
   login,
 } = require('./controllers/users');
+
+
 // const { errorHandler } = require('./errors/errors');
 
 const { PORT = 3000, MONGODB_URL = 'mongodb://127.0.0.1:27017/mestodb' } = process.env;
@@ -24,12 +28,14 @@ const router = require('./routes/index');
 
 app.use(express.json());
 // подключили роуты юзера
-app.post('/signin', login);
-app.post('/signup', createProfile);
+app.post('/signin',validationLogin, login);
+app.post('/signup',validationCreateUser, createProfile);
 
 app.use(auth);
 app.use(router);
 
+
+app.use(errors());
 app.use((err, req, res, next) => {
   // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
