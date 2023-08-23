@@ -21,9 +21,8 @@ const createProfile = (req, res, next) => {
       userModel.create({
         name, about, avatar, email, password: hash,
       })
-        .then(() => {
-          const userInfo = removePassword(req.body);
-          return res.status(HTTP_STATUS_CREATED).send(userInfo);
+        .then((user) => {
+          return res.status(HTTP_STATUS_CREATED).send(removePassword(user._doc));
         })
         .catch((err) => {
           if (err.code === 11000) {
