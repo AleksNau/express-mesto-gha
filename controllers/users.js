@@ -30,10 +30,10 @@ const createProfile = (req, res, next) => {
         }))
         .catch((err) => {
           if (err.code === 11000) {
-            Promise.reject(new ConflictError('Пользователь с таким email уже существует'));
+            return (new ConflictError('Пользователь с таким email уже существует'));
           }
           if (err instanceof ValidationError) {
-            Promise.reject (BadRequestError(`Ошибка валидации: ${err.message}`));
+            return (new BadRequestError(`Ошибка валидации: ${err.message}`));
           }
           next(err);
         });
@@ -60,7 +60,7 @@ const getProfileById = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof CastError) {
-        return new BadRequestError(`Ошибка Id: ${err.message}`);
+        return (new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });
@@ -88,7 +88,7 @@ const updateProfile = (req, res, next) => {
     .then((user) => res.status(HTTP_STATUS_OK).send(user))
     .catch((err) => {
       if (err instanceof ValidationError) {
-        return new BadRequestError(`Ошибка валидации: ${err.message}`);
+        return (new BadRequestError(`Ошибка валидации: ${err.message}`));
       }
 
       next(err);
