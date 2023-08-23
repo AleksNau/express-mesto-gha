@@ -20,7 +20,6 @@ router.get('/:id', celebrate({
 // получить всех пользователей
 router.get('/', getUsersList);
 
-
 router.patch('/me',validationUpdateUser, updateProfile);
 
 router.patch('/me/avatar',validationUpdateAvatar, changeAvatar);
