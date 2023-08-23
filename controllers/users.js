@@ -35,7 +35,7 @@ const createProfile = (req, res, next) => {
           if (err instanceof ValidationError) {
             return next(new BadRequestError(`Ошибка валидации: ${err.message}`));
           }
-          next(err);
+          return next(err);
         });
     });
 };
@@ -91,7 +91,7 @@ const updateProfile = (req, res, next) => {
         return next(new BadRequestError(`Ошибка валидации: ${err.message}`));
       }
 
-      next(err);
+      return next(err);
     });
   // 400,404,500
 };
@@ -112,7 +112,7 @@ const changeAvatar = (req, res, next) => {
       if (err instanceof ValidationError) {
         return next(new BadRequestError(`Ошибка валидации: ${err.message}`));
       }
-      next(err);
+      return next(err);
     });
   // 400,404,500
 };
@@ -131,7 +131,7 @@ const getCurrentUser = (req, res, next) => {
         return next(new BadRequestError('Переданы некорректные данные'));
       } if (err.message === 'NotFound') {
         return next(new NotFoundError('Пользователь не найден'));
-      } next(err);
+      } return next(err);
     });
 };
 

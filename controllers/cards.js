@@ -21,9 +21,9 @@ const createCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err instanceof ValidationError) {
-        next(new BadRequestError(`Ошибка валидации: ${err.message}`));
+        return next(new BadRequestError(`Ошибка валидации: ${err.message}`));
       }
-      next(err);
+      return next(err);
     });
 };// 400,500
 
@@ -41,7 +41,7 @@ const deleteCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err instanceof CastError) {
-        next(new BadRequestError(`Ошибка Id: ${err.message}`));
+        return next(new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });
@@ -60,7 +60,7 @@ const getLikes = (req, res, next) => {
     .then((card) => res.status(HTTP_STATUS_OK).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
-        next(new BadRequestError(`Ошибка Id: ${err.message}`));
+        return next(new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });
@@ -80,7 +80,7 @@ const deleteLikes = (req, res, next) => {
     .then((card) => res.status(HTTP_STATUS_OK).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
-        next(new BadRequestError(`Ошибка Id: ${err.message}`));
+        return next(new BadRequestError(`Ошибка Id: ${err.message}`));
       }
       return next(err);
     });
