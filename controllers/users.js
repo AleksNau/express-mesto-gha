@@ -21,9 +21,7 @@ const createProfile = (req, res, next) => {
       userModel.create({
         name, about, avatar, email, password: hash,
       })
-        .then((user) => {
-          return res.status(HTTP_STATUS_CREATED).send(removePassword(user._doc));
-        })
+        .then((user) => res.status(HTTP_STATUS_CREATED).send(removePassword(user._doc)))
         .catch((err) => {
           if (err.code === 11000) {
             next(new ConflictError('Пользователь с таким email уже существует'));
@@ -128,7 +126,8 @@ const getCurrentUser = (req, res, next) => {
       } else if (err.message === 'NotFound') {
         next(new NotFoundError('Пользователь не найден'));
       } else next(err);
-    });}
+    });
+};
 
 module.exports = {
   createProfile,

@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 const {
-  getProfileById, getUsersList, updateProfile, changeAvatar,getCurrentUser
+  getProfileById, getUsersList, updateProfile, changeAvatar, getCurrentUser,
 } = require('../controllers/users');
 
 const {
@@ -20,10 +20,8 @@ router.get('/:id', celebrate({
 // получить всех пользователей
 router.get('/', getUsersList);
 
-router.patch('/me',validationUpdateUser, updateProfile);
+router.patch('/me', validationUpdateUser, updateProfile);
 
-router.patch('/me/avatar',validationUpdateAvatar, changeAvatar);
-
-
+router.patch('/me/avatar', validationUpdateAvatar, changeAvatar);
 
 module.exports = router;

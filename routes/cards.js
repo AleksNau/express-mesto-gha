@@ -9,11 +9,11 @@ const {
 // отправка карточек
 router.get('/', getCards);
 
-router.post('/',validationCreateCard, createCard);
+router.post('/', validationCreateCard, createCard);
 
-router.delete('/:cardId',validationCardById, deleteCard);
+router.delete('/:cardId', validationCardById, deleteCard);
 
-router.put('/:cardId/likes',validationCardById, getLikes);
-router.delete('/:cardId/likes',validationCardById, deleteLikes);
+router.put('/:cardId/likes', validationCardById, getLikes);
+router.delete('/:cardId/likes', validationCardById, deleteLikes);
 
 module.exports = router;

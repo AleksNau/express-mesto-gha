@@ -37,7 +37,8 @@ const deleteCard = (req, res, next) => {
       if (!card.owner.equals(req.user._id)) {
         return next(new ForbiddenError('Вы не можете удалить чужую карточку'));
       }
-      return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }))})
+      return cardModel.deleteOne({ _id: cardId }).then(() => res.send({ message: 'Карточка успешно удалена' }));
+    })
     .catch((err) => {
       if (err instanceof CastError) {
         next(new BadRequestError(`Ошибка Id: ${err.message}`));

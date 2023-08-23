@@ -51,7 +51,7 @@ module.exports.validationUpdateAvatar = celebrate({
     avatar: Joi.string().required().custom(validationUrl),
   }),
 });
-//почемуто не работает
+// почемуто не работает
 module.exports.validationUserId = celebrate({
   params: Joi.object().keys({
     userId: Joi.string().length(24),
