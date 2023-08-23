@@ -1,27 +1,13 @@
 const { celebrate, Joi } = require('celebrate');
+const { validationID, validationURL } = require('../utils/constants');
 
-// const isUrl = require('validator/lib/isURL');
-const {
-  BadRequestError,
-} = require('../errors/errors');
-
-const validationID = (id) => {
-  if (/^[0-9a-fA-F]{24}$/.test(id)) {
-    return id;
-  }
-  throw new BadRequestError('Передан некорретный id.');
-};
-
-const validationURL = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/;
-
-// аутенфикация
 const validationLogin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
 });
-// авторизация
+
 const validationCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),

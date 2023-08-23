@@ -1,7 +1,7 @@
 const {
   HTTP_STATUS_BAD_REQUEST,
 } = require('http2').constants;
-const serverError = require('./serverError');
+
 const BadRequestError = require('./BadRequestError');
 const NotFoundError = require('./NotFoundError');
 const ConflictError = require('./ConflictError');
@@ -15,24 +15,7 @@ const errorHandler = (err, req, res, next) => {
   next(err);
 };
 
-/*
-app.use((err, req, res, next) => {
-  // если у ошибки нет статуса, выставляем 500
-  const { statusCode = 500, message } = err;
-
-  res
-    .status(statusCode)
-    .send({
-      // проверяем статус и выставляем сообщение в зависимости от него
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message
-    });
-});
-
-*/
 module.exports = {
-  serverError,
   BadRequestError,
   NotFoundError,
   ConflictError,
