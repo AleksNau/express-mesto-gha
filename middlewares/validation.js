@@ -5,15 +5,6 @@ const {
   BadRequestError,
 } = require('../errors/errors');
 
-const validationUrl = (url) => {
-  // isUrl(url)
-  const validate = /^((http|https|ftp):\/\/)?(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)/i;
-  if (validate) {
-    return url;
-  }
-  throw new BadRequestError('Некорректный адрес URL');
-};
-
 const validationID = (id) => {
   if (/^[0-9a-fA-F]{24}$/.test(id)) {
     return id;
@@ -33,7 +24,7 @@ module.exports.validationCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().custom(validationUrl),
+    avatar: Joi.string().regex(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
