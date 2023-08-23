@@ -11,7 +11,6 @@ const {
 
 } = require('../errors/errors');
 
-const removePassword = ({ password, ...rest }) => rest;
 const createProfile = (req, res, next) => {
   const {
     name, about, avatar, email, password,
@@ -21,7 +20,14 @@ const createProfile = (req, res, next) => {
       userModel.create({
         name, about, avatar, email, password: hash,
       })
-        .then((user) => res.status(HTTP_STATUS_CREATED).send(removePassword(user._doc)))
+        .then((user) => res.status(HTTP_STATUS_CREATED).send({
+          _id: user._id,
+          email: user.email,
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+
+        }))
         .catch((err) => {
           if (err.code === 11000) {
             next(new ConflictError('Пользователь с таким email уже существует'));
