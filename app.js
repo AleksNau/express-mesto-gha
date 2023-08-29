@@ -5,7 +5,9 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
 require('dotenv').config();
+
 const { validationCreateUser, validationLogin } = require('./middlewares/validation');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 const handleError = require('./middlewares/handleError');
 const {
@@ -30,12 +32,15 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
-app.use(limiter);
+
 
 app.use(helmet());
 
 module.exports.createCard = () => {
 };
+
+app.use(requestLogger);
+app.use(limiter);
 // импортированили роуты
 const router = require('./routes/index');
 
@@ -47,6 +52,8 @@ app.post('/signup', validationCreateUser, createProfile);
 app.use(auth);
 app.use(router);
 
+
+app.use(errorLogger);
 app.use(errors());
 app.use(handleError);
 app.listen(PORT, () => {
