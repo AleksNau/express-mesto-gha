@@ -1,5 +1,6 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
+const cors = require('cors')
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { errors } = require('celebrate');
@@ -23,6 +24,8 @@ mongoose.connect(MONGODB_URL, {
 });
 
 const app = express();
+
+//app.use(cors)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
