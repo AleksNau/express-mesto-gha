@@ -9,7 +9,7 @@ const {
 } = require('../errors/errors');
 
 const getCards = (req, res, next) => cardModel.find()
-  .then((users) => res.status(HTTP_STATUS_OK).send(users))
+  .then((cards) => res.status(HTTP_STATUS_OK).send(cards))
   .catch(next);// 400,500
 
 const createCard = (req, res, next) => {
